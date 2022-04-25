@@ -8,15 +8,14 @@ const saveBtn = document.getElementById("jsSave");
 const INITIAL_COLOR = "#2c2c2c";
 const CANVAS_SIZE = 700;
 
-canvas.width = CANVAS_SIZE;
-canvas.height = CANVAS_SIZE;
+canvas.width = document.getElementsByClassName("canvas")[0].offsetWidth;
+canvas.height = document.getElementsByClassName("canvas")[0].offsetHeight;
 
 ctx.fillStyle = "white";
-ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+ctx.fillRect(0,0,CANVAS_SIZE, CANVAS_SIZE);
 ctx.strokeStyle = INITIAL_COLOR;
-ctx.linewidth = 2.5;
 ctx.fillStyle = INITIAL_COLOR;
-
+ctx.lineWith = 2.5;
 
 let painting = false;
 let filling = false;
@@ -45,38 +44,35 @@ function onMouseDown(event){
     painting = true;
 }
 
-function onMouseUp(event){
-    stopPating();
-}
-
-function handleColorClick(event){
+function handleColorClick(event) {
     const color = event.target.style.backgroundColor;
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
 }
 
-function handleRangeChange(event){
-    ctx.linewidth = event.target.value;
+function handleRangeChange(event) {
+    const size = event.target.value;
+    ctx.lineWith = size;
 }
 
-function handelModeClick(){
-    if(filling === true){
+function handleModeClick() {
+    if(filling === true) {
         filling = false;
-        mode.innerText = "Fill"
+        mode.innerText = "Fill";
     } else {
         filling = true;
         mode.innerText = "Paint";
+    }
+}
+
+function handleCanvasClick() {
     
+    if(filling) {
+        ctx.fillRect(0,0,CANVAS_SIZE, CANVAS_SIZE)
     }
 }
 
-function handleCnavasClick(){
-    if(filling){
-        ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-    }
-}
-
-function handelSave(){
+function handleSaveClick() {
     const image = canvas.toDataURL();
     const link = document.createElement("a");
     link.href = image;
@@ -89,20 +85,19 @@ if(canvas){
     canvas.addEventListener("mousedown", startPainting);
     canvas.addEventListener("mouseup", stopPating);
     canvas.addEventListener("mouseleave", stopPating);
-    canvas.addEventListener("click", handleCnavasClick)
+    canvas.addEventListener("click", handleCanvasClick)
 }
 
-Array.from(colors).forEach(color => 
-    color.addEventListener("click", handleColorClick));
+Array.from(colors).forEach(color => color.addEventListener("click", handleColorClick));
 
 if(range) {
     range.addEventListener("input", handleRangeChange);
-};
-
-if(mode) {
-    mode.addEventListener("click", handelModeClick);
 }
 
-if(saveBtn){
-    saveBtn.addEventListener("click", handelSave);
+if(mode) {
+    mode.addEventListener("click", handleModeClick);
+}
+
+if(saveBtn) {
+    saveBtn.addEventListener("click", handleSaveClick);
 }
